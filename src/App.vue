@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import PortfolioMap from './components/PortfolioMap'
-import Filters from './components/Filters'
+import PortfolioMap from './views/PortfolioMap'
+import Filters from './views/Filters'
 
 export default {
   name: 'app',
