@@ -62,9 +62,10 @@ input.cmn-toggle-yes-no + label:after {
   font-size: 15px;
   text-align: center;
   line-height: 15px;
+  border: 1px dashed #f2f2f2;
 }
 input.cmn-toggle-yes-no + label:before {
-  background-color: #dddddd;
+  background-color: #eee;
   content: attr(data-off);
   transition: transform 0.5s;
   backface-visibility: hidden;
