@@ -1,6 +1,7 @@
 <template>
   <div>
     <div id="filters">
+      <h1>Countries</h1>
       <FilterToggle v-for="filter in filters" :filter="filter"></FilterToggle>
     </div>
   </div>
@@ -28,7 +29,7 @@ export default {
 <style>
 #filters{
     text-align: right;
-    background-color: #fff;
+    background-color: #f2f2f2;
     position: fixed;
     top: 0;
     right: 0;
