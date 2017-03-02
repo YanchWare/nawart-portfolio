@@ -6,20 +6,38 @@
 
 <script>
 import Leaflet from 'leaflet'
+import {mapGetters} from 'vuex'
 
 export default {
   name: 'portfolioMap',
+  computed: mapGetters({
+    stories: 'allArticles'
+  }),
 
-  components: {},
-
-  data () {
+  data: function () {
     return {
-      markers: null
+      countriesLatLang: [
+        { catId: '654', location: [41, 20], name: 'Albania' },
+        { catId: '867', location: [41.66667, 21.75], name: 'Balcani' },
+        { catId: '659', location: [48, 68], name: 'Central Asia' },
+        { catId: '687', location: [-2.5, 23.5], name: 'Congo' },
+        { catId: '15', location: [27, 30], name: 'Egypt' },
+        { catId: '959', location: [46, 2], name: 'Francia' },
+        { catId: '689', location: [31.5, 34.46667], name: 'Gaza' },
+        { catId: '656', location: [39, 22], name: 'Greece' },
+        { catId: '898', location: [47, 20], name: 'Hungary' },
+        { catId: '17', location: [32, 53], name: 'Iran' },
+        { catId: '658', location: [33, 44], name: 'Iraq' },
+        { catId: '16', location: [31.92157, 35.20329], name: 'Israel and Palestine' },
+        { catId: '685', location: [42.83333, 12.83333], name: 'Italy' },
+        { catId: '691', location: [31, 36], name: 'Jordan' },
+        { catId: '660', location: [32, -6], name: 'Morocco' },
+        { catId: '690', location: [35, 38], name: 'Siria' },
+        { catId: '688', location: [34, 9], name: 'Tunisia' },
+        { catId: '657', location: [39, 35], name: 'Turkey' },
+        { catId: '692', location: [15.5, 47.5], name: 'Yemen' }
+      ]
     }
-  },
-
-  created () {
-    this.fetchData()
   },
 
   updated () {
@@ -30,95 +48,59 @@ export default {
     this.initMap()
   },
 
-  watch: {
-    // call again the method if the route changes
-    '$route': 'fetchData'
-  },
-
   methods: {
 
-    fetchData () {
-      this.markers = [
-        {
-          location: [37.732801, 14.950996],
-          locationId: 'galvarina',
+    initMap () {
+      let markers = this.countriesLatLang.map((country) => {
+        return {
+          name: country.name,
+          location: country.location,
+          stories: this.stories.map(function (story) {
+            if (story.categories.indexOf(country.catId) >= 0) {
+              return story
+            }
+          }),
           icon: {
             iconUrl: '/static/images/grottadelgelo.jpg',
             shadowUrl: '',
-            iconSize: [50, 50],
-            shadowSize: [0, 0]
-          }
-        },
-        {
-          location: [37.806111, 14.983333],
-          locationId: 'grottadelgelo',
-          icon: {
-            iconUrl: '/static/images/grottadelgelo.jpg',
-            shadowUrl: '',
-            iconSize: [50, 50],
-            shadowSize: [0, 0]
-          }
-        },
-        {
-          location: [37.8549304, 15.2696615],
-          locationId: 'taormina',
-          icon: {
-            iconUrl: '/static/images/grottadelgelo.jpg',
-            shadowUrl: '',
-            iconSize: [50, 50],
-            shadowSize: [0, 0]
-          }
-        },
-        {
-          location: [37.727778, 15.055556],
-          locationId: 'valleDelBove',
-          icon: {
-            iconUrl: '/static/images/grottadelgelo.jpg',
-            shadowUrl: '',
-            iconSize: [50, 50],
-            shadowSize: [0, 0]
-          }
-        },
-        {
-          location: [37.7880575, 14.8157655],
-          locationId: 'bronte',
-          icon: {
-            iconUrl: '/static/images/grottadelgelo.jpg',
-            shadowUrl: '',
-            iconSize: [50, 50],
+            iconSize: [25, 25],
             shadowSize: [0, 0]
           }
         }
-      ]
-    },
+      })
 
-    initMap () {
       let myMap = Leaflet.map('portfolio-map', { zoomControl: false }).setView([37.7220031, 15.1464744], 11)
-      Leaflet.tileLayer('https://api.mapbox.com/styles/v1/amenuor/ciz06kin600052rmej3o9yrsf/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYW1lbnVvciIsImEiOiJjaXlhZmxzeGkwMDR0MndvZXp3OWgybDI5In0.FVcU8LAD7RwwawnYR4Av8w', {
+      Leaflet.tileLayer('https:api.mapbox.com/styles/v1/amenuor/ciz06kin600052rmej3o9yrsf/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYW1lbnVvciIsImEiOiJjaXlhZmxzeGkwMDR0MndvZXp3OWgybDI5In0.FVcU8LAD7RwwawnYR4Av8w', {
         maxZoom: 18,
         attribution: '',
         id: 'mapbox.streets'
       }).addTo(myMap)
-      this.markers.map((marker) => {
+      let markersOnMap = markers.map((marker) => {
         let markerIcon = Leaflet.icon(marker.icon)
         let markerOnMap = Leaflet.marker(marker.location, {icon: markerIcon}).addTo(myMap)
 
         // Add circle around marker
         let icon = window.$(markerOnMap._icon)
-        icon.parent().append(this.getSpinnerCode(marker.locationId))
-        icon.parent().find('#' + marker.locationId).css({
+        let className = marker.name.replace(' ', '_')
+        icon.parent().append(this.getSpinnerCode(className))
+        icon.parent().find('#' + className).css({
           'transform': icon.css('transform'),
           'margin-left': icon.css('margin-left') + icon.position().left,
           'margin-top': icon.css('margin-top') + icon.position().top
         })
         myMap.on('zoomend', function () {
-          icon.parent().find('#' + marker.locationId).css('transform', icon.css('transform'))
+          icon.parent().find('#' + className).css('transform', icon.css('transform'))
         })
 
         markerOnMap.on('click', () => {
-          this.$router.push({ name: 'locations', params: { locationId: marker.locationId } })
+          this.$router.push({ name: 'locations', params: { name: marker.name } })
         })
+        return markerOnMap
       })
+
+      /* eslint-disable new-cap */
+      let group = new Leaflet.featureGroup(markersOnMap)
+      myMap.fitBounds(group.getBounds())
     },
 
     getSpinnerCode (markerId) {
@@ -151,11 +133,11 @@ export default {
 }
 
 .loader {
-  width: 70px;
-  width: 70px;
+  width: 35px;
+  width: 35px;
   position: relative;
-  top: -106px;
-  left: -35px;
+  top: -52px;
+  left: -17px;
 }
 .loader:before {
   content: '';

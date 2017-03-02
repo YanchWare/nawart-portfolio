@@ -1,8 +1,5 @@
 <template>
-  <div v-if="filter.name.toLowerCase() && 
-            filter.name.toLowerCase().toLowerCase() != 'ultra-nationalists' &&  
-            filter.name.toLowerCase().toLowerCase() != 'railway diaries' &&
-            filter.name.toLowerCase().toLowerCase() != 'uncategorized'" style="display: inline-block;">
+  <div v-if="filter && filter.name" style="display: inline-block;">
     <div class="switch">
       <input :id="filter.name.toLowerCase().replace(' ','-')" class="cmn-toggle cmn-toggle-yes-no" type="checkbox">
       <label :for="filter.name.toLowerCase().replace(' ','-')" :data-on="filter.name" :data-off="filter.name"></label>

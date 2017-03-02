@@ -31,7 +31,22 @@ const actions = {
 // mutations
 const mutations = {
   [types.INIT_FILTERS] (state, filters) {
-    state.all = state.all.concat(filters)
+    if (!filters) {
+      return
+    }
+    state.all = state.all.concat(filters.map(function (filter) {
+      if (filter.count > 0 &&
+        filter.name.toLowerCase().toLowerCase() !== 'ultra-nationalists' &&
+        filter.name.toLowerCase().toLowerCase() !== 'railway diaries' &&
+        filter.name.toLowerCase().toLowerCase() !== '118 libri' &&
+        filter.name.toLowerCase().toLowerCase() !== 'cinema' &&
+        filter.name.toLowerCase().toLowerCase() !== 'blog' &&
+        filter.name.toLowerCase().toLowerCase() !== 'consulenze' &&
+        filter.name.toLowerCase().toLowerCase() !== 'from the field' &&
+        filter.name.toLowerCase().toLowerCase() !== 'uncategorized') {
+        return filter
+      }
+    }))
   },
 
   [types.ADD_TO_CART] (state, { id }) {
