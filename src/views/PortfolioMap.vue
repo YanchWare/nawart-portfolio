@@ -81,7 +81,7 @@ export default {
 
         // Add circle around marker
         let icon = window.$(markerOnMap._icon)
-        let className = marker.name.replace(' ', '_')
+        let className = marker.name.replace(/\s/g, '_')
         icon.parent().append(this.getSpinnerCode(className))
         icon.parent().find('#' + className).css({
           'transform': icon.css('transform'),
