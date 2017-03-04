@@ -48,36 +48,52 @@ export default {
     this.initMap()
   },
 
+  watch: {
+    // update map when stories change
+    'stories': 'updateMap'
+  },
+
   methods: {
 
     initMap () {
+      this.myMap = Leaflet.map('portfolio-map', { zoomControl: false }).setView([37.7220031, 15.1464744], 11)
+      Leaflet.tileLayer('https://api.mapbox.com/styles/v1/amenuor/ciz06kin600052rmej3o9yrsf/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYW1lbnVvciIsImEiOiJjaXlhZmxzeGkwMDR0MndvZXp3OWgybDI5In0.FVcU8LAD7RwwawnYR4Av8w', {
+        maxZoom: 18,
+        attribution: '',
+        id: 'mapbox.streets'
+      }).addTo(this.myMap)
+      this.updateMap()
+    },
+
+    updateMap () {
       let markers = this.countriesLatLang.map((country) => {
+        let markerStories = this.stories.filter(function (story) {
+          return story.categories.indexOf(parseInt(country.catId)) >= 0
+        })
         return {
+          id: country.catId,
           name: country.name,
           location: country.location,
-          stories: this.stories.map(function (story) {
-            if (story.categories.indexOf(country.catId) >= 0) {
-              return story
-            }
-          }),
+          stories: markerStories,
           icon: {
-            iconUrl: '/static/images/grottadelgelo.jpg',
-            shadowUrl: '',
             iconSize: [25, 25],
-            shadowSize: [0, 0]
+            className: 'map-marker',
+            html: markerStories.length
           }
         }
       })
 
-      let myMap = Leaflet.map('portfolio-map', { zoomControl: false }).setView([37.7220031, 15.1464744], 11)
-      Leaflet.tileLayer('https:api.mapbox.com/styles/v1/amenuor/ciz06kin600052rmej3o9yrsf/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYW1lbnVvciIsImEiOiJjaXlhZmxzeGkwMDR0MndvZXp3OWgybDI5In0.FVcU8LAD7RwwawnYR4Av8w', {
-        maxZoom: 18,
-        attribution: '',
-        id: 'mapbox.streets'
-      }).addTo(myMap)
-      let markersOnMap = markers.map((marker) => {
-        let markerIcon = Leaflet.icon(marker.icon)
-        let markerOnMap = Leaflet.marker(marker.location, {icon: markerIcon}).addTo(myMap)
+      // Remove existing Markers
+      if (this.myMap.markersOnMap && this.myMap.markersOnMap.length > 0) {
+        this.myMap.markersOnMap.map((marker) => {
+          this.myMap.removeLayer(marker)
+        })
+      }
+
+      // Add new markers
+      this.myMap.markersOnMap = markers.map((marker) => {
+        let markerIcon = Leaflet.divIcon(marker.icon)
+        let markerOnMap = Leaflet.marker(marker.location, {icon: markerIcon}).addTo(this.myMap)
 
         // Add circle around marker
         let icon = window.$(markerOnMap._icon)
@@ -88,7 +104,7 @@ export default {
           'margin-left': icon.css('margin-left') + icon.position().left,
           'margin-top': icon.css('margin-top') + icon.position().top
         })
-        myMap.on('zoomend', function () {
+        this.myMap.on('zoomend', function () {
           icon.parent().find('#' + className).css('transform', icon.css('transform'))
         })
 
@@ -99,8 +115,8 @@ export default {
       })
 
       /* eslint-disable new-cap */
-      let group = new Leaflet.featureGroup(markersOnMap)
-      myMap.fitBounds(group.getBounds())
+      let group = new Leaflet.featureGroup(this.myMap.markersOnMap)
+      this.myMap.fitBounds(group.getBounds())
     },
 
     getSpinnerCode (markerId) {
@@ -123,8 +139,12 @@ export default {
 }
 
 /* Markers */
-.leaflet-marker-icon{
+.map-marker{
   border-radius: 50%;
+  text-align: center;
+  background: #fff;
+  z-index: -2;
+  line-height: 2em;
 }
 
 .showbox{

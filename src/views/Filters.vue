@@ -65,6 +65,6 @@ export default {
 .menu{
   background-color: #f2f2f2;
   border: 1px dashed #a9e3dc;
-  border-radius: 20px;
+  border-radius: 10px;
 }
 </style>
