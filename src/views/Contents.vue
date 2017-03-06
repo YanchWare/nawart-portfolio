@@ -1,6 +1,7 @@
 <template>
   <div id="contents">
-      <Story v-for="story in stories" :story="story"></Story>
+    <h2>Stories: {{stories.length}}</h2>
+    <Story v-for="story in stories" :story="story"></Story>
   </div>  
 </template>
 

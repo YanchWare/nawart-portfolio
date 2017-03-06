@@ -1,9 +1,6 @@
 <template>
   <div id="filters">
     <div class="menu">
-      <h2>Stories: {{stories.length}}</h2>
-    </div>
-    <div class="menu">
       <h2>Countries</h2>
       <FilterToggle v-for="filter in filters" :filter="filter"></FilterToggle>
     </div>
