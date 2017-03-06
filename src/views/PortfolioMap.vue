@@ -98,6 +98,7 @@ export default {
         // Add circle around marker
         let icon = window.$(markerOnMap._icon)
         let className = marker.name.replace(/\s/g, '_')
+        icon.parent().find('#' + className).remove()
         icon.parent().append(this.getSpinnerCode(className))
         icon.parent().find('#' + className).css({
           'transform': icon.css('transform'),
@@ -132,8 +133,8 @@ export default {
 #portfolio-map{
   position: fixed;
   top: 0;
-  left: 0;
-  width: 100vw;
+  left: 25vw;
+  width: 56vw;
   height: 100vh;
   z-index: -1;
 }
@@ -142,7 +143,8 @@ export default {
 .map-marker{
   border-radius: 50%;
   text-align: center;
-  background: #fff;
+  background: #ff7979;
+  color: #eee;
   z-index: -2;
   line-height: 2em;
 }

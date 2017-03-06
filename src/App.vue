@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <Contents></Contents>
     <PortfolioMap></PortfolioMap>
     <Filters><Filters>
   </div>
@@ -8,12 +9,14 @@
 <script>
 import PortfolioMap from './views/PortfolioMap'
 import Filters from './views/Filters'
+import Contents from './views/Contents'
 
 export default {
   name: 'app',
   components: {
     PortfolioMap,
-    Filters
+    Filters,
+    Contents
   }
 }
 </script>
