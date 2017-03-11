@@ -52,7 +52,7 @@ export default {
     right: 0;
     width: 25vw;
     height: 80vh;
-    z-index: 1;
+    z-index: 2;
     overflow-x: hidden;
     overflow-y: auto;
     padding: 0;
