@@ -1,18 +1,27 @@
 <template>
   <div>
     <div id="portfolio-map"></div>
+    <div id="controls">
+      <h2>Stories: {{stories.length}}</h2>
+      <ScrollDown></ScrollDown>
+    </div>
   </div>
 </template>
 
 <script>
 import Leaflet from 'leaflet'
 import {mapGetters} from 'vuex'
+import ScrollDown from '../components/ScrollDown'
 
 export default {
   name: 'portfolioMap',
   computed: mapGetters({
     stories: 'allArticles'
   }),
+
+  components: {
+    ScrollDown
+  },
 
   data: function () {
     return {
@@ -56,7 +65,7 @@ export default {
   methods: {
 
     initMap () {
-      this.myMap = Leaflet.map('portfolio-map', { zoomControl: false }).setView([37.7220031, 15.1464744], 11)
+      this.myMap = this.myMap ? this.myMap : Leaflet.map('portfolio-map', { zoomControl: false }).setView([37.7220031, 15.1464744], 11)
       Leaflet.tileLayer('https://api.mapbox.com/styles/v1/amenuor/ciz06kin600052rmej3o9yrsf/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYW1lbnVvciIsImEiOiJjaXlhZmxzeGkwMDR0MndvZXp3OWgybDI5In0.FVcU8LAD7RwwawnYR4Av8w', {
         maxZoom: 18,
         attribution: '',
@@ -130,12 +139,22 @@ export default {
 </script>
 
 <style>
+h2{
+ text-align: center;
+ margin: 0;
+ padding: 10px;
+}
+
+#controls {
+  background-color: #f2f2f2;
+  height: 20vh;
+}
+
 #portfolio-map{
-  position: fixed;
-  top: 0;
-  left: 25vw;
-  width: 56vw;
-  height: 100vh;
+  width: 79vw;
+  height: 80vh;
+  margin: 0;
+  padding: 0;
   z-index: -1;
 }
 

@@ -47,12 +47,12 @@ export default {
 #filters{
     text-align: center;
     background-color: transparent;
-    position: fixed;
+    position: absolute;
     top: 0;
     right: 0;
     width: 25vw;
-    height: 100vh;
-    z-index: -1;
+    height: 80vh;
+    z-index: 1;
     overflow-x: hidden;
     overflow-y: auto;
     padding: 0;

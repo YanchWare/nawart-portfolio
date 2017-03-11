@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <Contents></Contents>
     <PortfolioMap></PortfolioMap>
-    <Filters><Filters>
+    <Filters></Filters>
+    <Contents></Contents>
   </div>
 </template>
 
@@ -22,5 +22,8 @@ export default {
 </script>
 
 <style>
-
+html, body{
+  margin: 0;
+  padding: 0;
+}
 </style>

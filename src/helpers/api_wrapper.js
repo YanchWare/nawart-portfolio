@@ -13,6 +13,17 @@ export default class APIWrapper {
     return 'http://nawartpress.com/wp-json/wp/v2/posts?per_page=100&page='
   }
 
+  static get mediaEndpoint () {
+    return 'http://nawartpress.com/wp-json/wp/v2/media/'
+  }
+
+  static getMedia (mediaId) {
+    return client({
+      path: APIWrapper.mediaEndpoint + mediaId,
+      method: 'GET'
+    })
+  }
+
   static getFilters (page) {
     return client({
       path: APIWrapper.filterEndpoint + page,
